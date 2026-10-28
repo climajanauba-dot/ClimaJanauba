@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>ClimaJanaúba - Equipe e Contato</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+
+
+  <!-- Google Fonts: Hanken Grotesk -->
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet" />
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#6bff8f",
+            "on-tertiary-fixed": "#291800",
+            "on-surface": "#1b1b1d",
+            "error-container": "#ffdad6",
+            "on-background": "#1b1b1d",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed": "#002109",
+            "surface-dim": "#dbd9db",
+            "outline-variant": "#c5c6cd",
+            "surface-container-low": "#f5f3f5",
+            "secondary": "#006e2f",
+            "on-secondary-fixed-variant": "#005321",
+            "surface-variant": "#e4e2e4",
+            "background": "#fbf8fb",
+            "on-tertiary-fixed-variant": "#5a4221",
+            "surface": "#fbf8fb",
+            "on-primary-fixed": "#0e1b31",
+            "secondary-container": "#6bff8f",
+            "on-secondary": "#ffffff",
+            "outline": "#75777e",
+            "inverse-surface": "#303032",
+            "on-secondary-container": "#007432",
+            "tertiary-container": "#2b1900",
+            "tertiary-fixed-dim": "#e3c196",
+            "surface-container-high": "#eae7ea",
+            "surface-tint": "#525f78",
+            "primary-container": "#101d33",
+            "primary-fixed": "#d7e3ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f0edef",
+            "secondary-fixed-dim": "#4ae176",
+            "error": "#ba1a1a",
+            "on-primary-container": "#7985a0",
+            "on-primary-fixed-variant": "#3b475f",
+            "on-surface-variant": "#45474d",
+            "inverse-primary": "#bac7e4",
+            "tertiary": "#050200",
+            "surface-container-highest": "#e4e2e4",
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#9d8059",
+            "primary-fixed-dim": "#bac7e4",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#ffddb4",
+            "primary": "#00030c",
+            "on-tertiary": "#ffffff",
+            "inverse-on-surface": "#f2f0f2",
+            "surface-bright": "#fbf8fb"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "card-padding": "1.25rem",
+            "container-max-width": "1440px",
+            "gutter": "1.5rem",
+            "stack-gap": "1rem",
+            "section-margin": "2.5rem",
+            "sidebar-width": "260px"
+          },
+          "fontFamily": {
+            "label-sm": ["Hanken Grotesk"],
+            "body-md": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-md": ["Hanken Grotesk"],
+            "display-lg": ["Hanken Grotesk"],
+            "headline-lg": ["Hanken Grotesk"],
+            "body-lg": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {
+              "lineHeight": "16px",
+              "fontWeight": "600"
+            }],
+            "body-md": ["16px", {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }],
+            "headline-md": ["24px", {
+              "lineHeight": "32px",
+              "fontWeight": "600"
+            }],
+            "label-md": ["14px", {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }],
+            "display-lg": ["48px", {
+              "lineHeight": "56px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }],
+            "headline-lg": ["32px", {
+              "lineHeight": "40px",
+              "fontWeight": "600"
+            }],
+            "body-lg": ["18px", {
+              "lineHeight": "28px",
+              "fontWeight": "400"
+            }]
+          }
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #45474d;
+      border-radius: 10px;
+    }
+
+    .custom-shadow {
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    }
+  </style>
+</head>
+
+<body class="bg-surface text-on-surface flex min-h-screen">
+  <!-- Main Content Area -->
+  <main class="max-w-container-max-width mx-auto p-10">
+    <!-- Header Section -->
+    <header class="fixed top-0 left-0 w-full h-20 bg-surface/95 backdrop-blur-md border-b border-outline-variant z-[100]">
+      <nav class="flex justify-between items-center w-full px-gutter max-w-container-max-width mx-auto h-full">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+          <span class="text-headline-md font-bold text-primary">ClimaJanaúba</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6">
+          <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="index.html">Home</a>
+          <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="dashboards.html">Dashboard</a>
+          <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="historico.html">Histórico</a>
+          <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="alertas.html">Alertas</a>
+          <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="analises.html">Análises</a>
+          <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="documentacao.html">Sobre</a>
+          <a class="font-label-md text-secondary font-bold border-b-2 border-secondary pb-1" href="equipe.html">Contato</a>
+        </div>
+        <a href="dashboards.html" class="bg-secondary text-on-secondary px-6 py-2 rounded-lg font-label-md hover:shadow-lg transition-all">Acessar Painel</a>
+      </nav>
+    </header>
+
+    <!-- Team Section -->
+    <section class="mb-16 mt-20">
+      <div class="flex items-center gap-2 mb-6">
+        <span class="material-symbols-outlined text-secondary">group</span>
+        <h3 class="font-headline-md text-headline-md text-primary">Nossa Equipe</h3> 
+      </div>
+      <p class="text-on-surface-variant text-sm mt-1">Currículos e Portfólios</p> <br>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Team Member 1 -->
+        <div class="bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col items-center text-center hover:scale-[1.02] transition-transform">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-secondary-fixed">
+            <img class="w-full h-full object-cover" src="img/perfilanaheloisa.jpeg" alt="Foto de perfil" />
+          </div>
+          <h4 class="font-headline-sm text-headline-sm text-primary">Ana Heloísa</h4>
+          <p class="font-label-md text-label-md text-secondary font-bold mb-2">Estudante do Técnico em nformática</p>
+          <div class="flex gap-2 mt-2">
+
+          <a href="https://anaheloisadejesusvas2008-source.github.io/portifolio/" target="_blank" rel="noopener noreferrer" title="Portfólio_ Ana Heloísa">
+             <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">code</span>
+          </a>
+
+        <a href="http://lattes.cnpq.br/8751180339867888" target="_blank" rel="noopener noreferrer" title="Currículo Lattes_ Ana Heloísa">
+           <span class="material-symbols-outlined"> person_search </span>
+        </a>
+          </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col items-center text-center hover:scale-[1.02] transition-transform">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-secondary-fixed">
+            <img class="w-full h-full object-cover" src="img/perfilheloisa.jpeg" alt="Foto de perfil" />    
+          </div>
+          <h4 class="font-headline-sm text-headline-sm text-primary">Heloísa Silva</h4>
+          <p class="font-label-md text-label-md text-secondary font-bold mb-2">Estudante do Técnico em nformática</p>
+          <div class="flex gap-2 mt-2">
+         <a href="https://hss17-lab.github.io/portfolioHelo/" target="_blank" rel="noopener noreferrer" title="Portfólio_ Heloísa Silva">
+           <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">code</span>
+        </a>
+
+        <a href="http://lattes.cnpq.br/6897260466534963" target="_blank" rel="noopener noreferrer" title="Currículo Lattes_Heloísa Silva">
+           <span class="material-symbols-outlined"> person_search </span>
+        </a>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col items-center text-center hover:scale-[1.02] transition-transform">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-secondary-fixed">
+            <img class="w-full h-full object-cover" src="img/perfiliasmim.jpeg" alt="Foto de perfil" /> 
+          </div>
+          <h4 class="font-headline-sm text-headline-sm text-primary">Iasmim Soares</h4>
+          <p class="font-label-md text-label-md text-secondary font-bold mb-2">Estudante do Técnico em nformática</p>
+          <div class="flex gap-2 mt-2">
+
+          <a href="https://iasmimvictoria735-ops.github.io/Portifolio/" target="_blank" rel="noopener noreferrer" title="Portfólio_ Iasmim Soares">
+           <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">code</span>
+          </a>
+
+        <a href="http://lattes.cnpq.br/8596293856251353" target="_blank" rel="noopener noreferrer" title="Currículo Lattes_ Iasmim Soares">
+           <span class="material-symbols-outlined"> person_search </span>
+        </a>
+          </div>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col items-center text-center hover:scale-[1.02] transition-transform">
+          <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-secondary-fixed">
+            <img class="w-full h-full object-cover" src="img/perfilmariaeduarda.jpeg" alt="Foto de perfil" /> 
+          </div>
+          <h4 class="font-headline-sm text-headline-sm text-primary">Maria Eduarda</h4>
+          <p class="font-label-md text-label-md text-secondary font-bold mb-2">Estudante do Técnico em nformática</p>
+          <div class="flex gap-2 mt-2">
+            
+            <a href="https://dudaaaa2.github.io/portifolio/" target="_blank" rel="noopener noreferrer" title="Portfólio_ Maria Eduarda">
+           <span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">code</span>
+        </a>
+
+        <a href="http://lattes.cnpq.br/0385885861370046" target="_blank" rel="noopener noreferrer" title="Currículo Lattes_ Maria Eduarda">
+           <span class="material-symbols-outlined"> person_search </span>
+        </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentor Card -->
+      <div class="mt-8 p-4 bg-surface-container flex items-center gap-6 rounded-xl border border-outline-variant max-w-md mx-auto lg:mx-0">
+        <img class="w-16 h-16 rounded-full object-cover grayscale" src="img/perfilcarlos.png" alt="Foto de Perfil"/>
+        <div>
+          <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Orientador</p>
+          <h5 class="font-headline-sm text-headline-sm text-primary">Prof. Carlos Manuel Pereira da Costa Filho</h5>
+          <div class="flex items-center gap-2 mt-1">
+            <div class="w-6 h-6 bg-secondary flex items-center justify-center rounded">
+              <span class="material-symbols-outlined text-[14px] text-white" style="font-variation-settings: 'FILL' 1;">school</span>
+            </div>
+            <span class="font-label-md text-label-md text-on-surface">IFNMG - Campus Janaúba</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <!-- Contact Form INTEGRADO COM FORMSPREE -->
+      <div class="lg:col-span-7 bg-surface-container-lowest p-8 rounded-2xl custom-shadow">
+        <div class="flex items-center gap-2 mb-8">
+          <span class="material-symbols-outlined text-secondary">edit_note</span>
+          <h3 class="font-headline-md text-headline-md text-primary">Envie uma mensagem</h3>
+        </div>
+        
+        <!-- Action e Method adicionados para o Formspree -->
+        <form action="https://formspree.io/f/xjybzlly" method="POST" class="space-y-6" id="contactForm">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant">Nome</label>
+              <!-- name="name" adicionado -->
+              <input name="name" class="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all" placeholder="Digite seu nome" type="text" required />
+            </div>
+            <div class="space-y-2">
+              <label class="font-label-md text-label-md text-on-surface-variant">E-mail</label>
+              <!-- name="email" adicionado -->
+              <input name="email" class="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all" placeholder="Digite seu e-mail" type="email" required />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface-variant">Mensagem</label>
+            <!-- name="message" adicionado -->
+            <textarea name="message" class="w-full px-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all resize-none" placeholder="Digite sua mensagem" rows="5" required></textarea>
+          </div>
+          <button class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-label-md text-label-md font-bold hover:bg-on-secondary-fixed-variant transition-all flex items-center justify-center gap-2 group" type="submit">
+            Enviar mensagem
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">send</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Info & Map -->
+      <div class="lg:col-span-5 space-y-8">
+        <div class="bg-primary text-on-primary p-8 rounded-2xl custom-shadow space-y-6">
+          <h3 class="font-headline-md text-headline-md text-secondary-fixed">Informações</h3>
+          <div class="flex items-start gap-4">
+            <span class="material-symbols-outlined text-secondary-fixed-dim mt-1">location_on</span>
+            <div>
+              <p class="font-label-sm text-label-sm text-on-primary/60 uppercase">Endereço</p>
+              <p class="font-body-md text-body-md">IFNMG - Campus Janaúba<br />Rodovia MGT 122, km 155<br />Janaúba - MG, 39440-000</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="material-symbols-outlined text-secondary-fixed-dim mt-1">mail</span>
+            <div>
+              <p class="font-label-sm text-label-sm text-on-primary/60 uppercase">E-mail</p>
+              <p class="font-body-md text-body-md">climajanauba@ifnmg.edu.br</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="material-symbols-outlined text-secondary-fixed-dim mt-1">call</span>
+            <div>
+              <p class="font-label-sm text-label-sm text-on-primary/60 uppercase">Telefone</p>
+              <p class="font-body-md text-body-md">(38) 3821-0000</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Map -->
+        <div class="rounded-2xl overflow-hidden custom-shadow h-64 relative border border-outline-variant">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.662219766943!2d-43.36716302527464!3d-15.768998322329411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x753dbca99b7b745%3A0xcfa92e395a377b92!2sIFNMG%20-%20Campus%20Avan%C3%A7ado%20Jana%C3%BAba%20(Novo%20Pr%C3%A9dio)!5e0!3m2!1spt-BR!2sbr!4v1786916479398!5m2!1spt-BR!2sbr" class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <div class="absolute bottom-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm p-3 rounded-lg border border-outline-variant shadow-lg flex items-center gap-3">
+            <div class="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
+            <span class="font-label-md text-label-md text-primary">Localização da Estação</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-10 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 ClimaJanaúba - Monitoramento Climático Inteligente. Todos os direitos reservados.</p>
+      <div class="flex gap-6">
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacidade</a>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Termos de Uso</a>
+        <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">IFNMG</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // ENVIO REAL COM FORMSPREE VIA AJAX (FETCH)
+    const contactForm = document.getElementById('contactForm');
+    
+    contactForm?.addEventListener('submit', async function(e) {
+      e.preventDefault(); // Impede o recarregamento da página
+      
+      const btn = this.querySelector('button');
+      const originalText = btn.innerHTML;
+
+      // Feedback visual: Enviando
+      btn.innerHTML = 'Enviando...';
+      btn.classList.add('opacity-70', 'pointer-events-none');
+
+      // Coleta os dados do formulário
+      const formData = new FormData(this);
+
+      try {
+        const response = await fetch(this.action, {
+          method: this.method,
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          // SUCESSO
+          btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Enviado com sucesso!';
+          btn.classList.replace('bg-secondary', 'bg-green-600');
+          this.reset(); // Limpa os campos
+        } else {
+          // ERRO DO SERVIDOR
+          throw new Error('Erro ao enviar');
+        }
+      } catch (error) {
+        // ERRO DE REDE
+        btn.innerHTML = 'Erro ao enviar. Tente novamente.';
+        btn.classList.replace('bg-secondary', 'bg-red-600');
+      } finally {
+        // Reseta o botão para o estado original após 3 segundos
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('opacity-70', 'pointer-events-none', 'bg-green-600', 'bg-red-600');
+          btn.classList.add('bg-secondary');
+        }, 3000);
+      }
+    });
+
+    // Hover sound/effects mock
+    const navItems = document.querySelectorAll('nav a');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Logic can be added here
+      });
+    });
+  </script>
+</body>
+
+</html>

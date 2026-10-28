@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>ClimaJanaúba - Análises Climáticas</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Bibliotecas de Gráficos e Labels -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#6bff8f", "on-tertiary-fixed": "#291800", "on-surface": "#1b1b1d", "error-container": "#ffdad6", "on-background": "#1b1b1d", "on-error-container": "#93000a", "on-secondary-fixed": "#002109", "surface-dim": "#dbd9db", "outline-variant": "#c5c6cd", "surface-container-low": "#f5f3f5", "secondary": "#006e2f", "on-secondary-fixed-variant": "#005321", "surface-variant": "#e4e2e4", "background": "#fbf8fb", "on-tertiary-fixed-variant": "#5a4221", "surface": "#fbf8fb", "on-primary-fixed": "#0e1b31", "secondary-container": "#6bff8f", "on-secondary": "#ffffff", "outline": "#75777e", "inverse-surface": "#303032", "on-secondary-container": "#007432", "tertiary-container": "#2b1900", "tertiary-fixed-dim": "#e3c196", "surface-container-high": "#eae7ea", "surface-tint": "#525f78", "primary-container": "#101d33", "primary-fixed": "#d7e3ff", "surface-container-lowest": "#ffffff", "surface-container": "#f0edef", "secondary-fixed-dim": "#4ae176", "error": "#ba1a1a", "on-primary-container": "#7985a0", "on-primary-fixed-variant": "#3b475f", "on-surface-variant": "#45474d", "inverse-primary": "#bac7e4", "tertiary": "#050200", "surface-container-highest": "#e4e2e4", "on-error": "#ffffff", "on-tertiary-container": "#9d8059", "primary-fixed-dim": "#bac7e4", "on-primary": "#ffffff", "tertiary-fixed": "#ffddb4", "primary": "#00030c", "on-tertiary": "#ffffff", "inverse-on-surface": "#f2f0f2", "surface-bright": "#fbf8fb"
+                    },
+                    "spacing": { "card-padding": "1.25rem", "container-max-width": "1440px", "gutter": "1.5rem", "section-margin": "2.5rem" },
+                    "fontFamily": { "body-md": ["Hanken Grotesk"], "headline-md": ["Hanken Grotesk"], "display-lg": ["Hanken Grotesk"], "headline-lg": ["Hanken Grotesk"] }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Hanken Grotesk', sans-serif; background-color: #fbf8fb; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .soft-shadow { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); }
+        input:disabled { background-color: #f0edef; cursor: not-allowed; opacity: 0.65; }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+
+    <!-- NAVBAR PADRONIZADA -->
+    <header class="fixed top-0 left-0 w-full h-20 bg-surface/80 backdrop-blur-md border-b border-outline-variant z-[100]">
+        <nav class="flex justify-between items-center w-full px-gutter max-w-container-max-width mx-auto h-full">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+                <span class="text-headline-md font-bold text-primary">ClimaJanaúba</span>
+            </div>
+            <div class="hidden md:flex items-center gap-6 text-sm">
+                <a class="text-on-surface-variant hover:text-secondary transition-colors" href="index.html">Home</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors" href="dashboards.html">Dashboard</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors" href="historico.html">Histórico</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors" href="alertas.html">Alertas</a>
+                <a class="text-secondary font-bold border-b-2 border-secondary pb-1" href="analises.html">Análises</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors" href="documentacao.html">Sobre</a>
+                <a class="text-on-surface-variant hover:text-secondary transition-colors" href="equipe.html">Contato</a>
+            </div>
+            <a href="dashboards.html" class="bg-secondary text-on-secondary px-6 py-2 rounded-lg font-bold hover:shadow-lg transition-all text-xs">Acessar Painel</a>
+        </nav>
+    </header>
+
+    <div class="h-20"></div>
+
+    <main class="w-full px-gutter max-w-container-max-width mx-auto pt-8 pb-10 flex-1">
+
+        <!-- =====================================================
+             FILTRO UNIVERSAL DE ANÁLISES
+        ====================================================== -->
+        <section class="bg-surface-container-lowest rounded-xl soft-shadow border border-outline-variant/30 p-5 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+
+                <!-- PERÍODO -->
+                <div class="md:col-span-3">
+                    <label for="periodoAnalise"
+                           class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-2 block">
+                        Período
+                    </label>
+                    <select id="periodoAnalise"
+                            class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-secondary">
+                        <option value="24h">Últimas 24 horas</option>
+                        <option value="7d">Últimos 7 dias</option>
+                        <option value="dia">Dia específico</option>
+                    </select>
+                </div>
+
+                <!-- DIA ESPECÍFICO -->
+                <div class="md:col-span-3 hidden" id="wrapDiaEspecifico">
+                    <label for="diaEspecifico"
+                           class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-2 block">
+                        Dia Específico
+                    </label>
+                    <input id="diaEspecifico" type="date"
+                           class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-secondary">
+                </div>
+
+                <!-- BOTÃO -->
+                <div class="md:col-span-3 md:col-start-10">
+                    <button id="btnAplicarFiltroAnalise" type="button"
+                            class="w-full bg-secondary text-white rounded-lg h-10 font-bold hover:opacity-90 flex items-center justify-center gap-2 shadow-sm">
+                        <span class="material-symbols-outlined text-base">filter_alt</span>
+                        Aplicar Filtro
+                    </button>
+                </div>
+            </div>
+
+            <!-- INFO DO RESULTADO -->
+            <div id="infoFiltroAnalise" class="mt-3 text-xs text-on-surface-variant"></div>
+        </section>
+
+        <!-- Métricas Rápidas -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-surface-container-lowest p-5 rounded-2xl soft-shadow border border-outline-variant/20">
+                <p class="text-[9px] font-black uppercase text-on-surface-variant tracking-widest mb-1">Média</p>
+                <h3 id="temp-media" class="text-2xl font-black text-primary">—</h3>
+            </div>
+            <div class="bg-surface-container-lowest p-5 rounded-2xl soft-shadow border border-outline-variant/20 border-l-4 border-l-error">
+                <p class="text-[9px] font-black uppercase text-error tracking-widest mb-1">Máxima</p>
+                <h3 id="temp-maxima" class="text-2xl font-black text-primary">—</h3>
+            </div>
+            <div class="bg-surface-container-lowest p-5 rounded-2xl soft-shadow border border-outline-variant/20 border-l-4 border-l-secondary">
+                <p class="text-[9px] font-black uppercase text-secondary tracking-widest mb-1">Mínima</p>
+                <h3 id="temp-minima" class="text-2xl font-black text-primary">—</h3>
+            </div>
+            <div class="bg-surface-container-lowest p-5 rounded-2xl soft-shadow border border-outline-variant/20">
+                <p class="text-[9px] font-black uppercase text-on-surface-variant tracking-widest mb-1">Total Chuva</p>
+                <h3 id="chuva-mes" class="text-2xl font-black text-primary">—</h3>
+            </div>
+        </section>
+
+        <!-- Seção de Gráficos -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Temperatura -->
+            <div class="lg:col-span-2 bg-surface-container-lowest p-6 rounded-2xl soft-shadow border border-outline-variant/20">
+                <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+                    <h4 class="text-lg font-black text-primary uppercase">Curva Térmica</h4>
+                    <span id="labelPeriodoGrafico"
+                          class="text-[9px] font-bold bg-secondary/10 text-secondary px-2 py-0.5 rounded-full uppercase">
+                        Últimas 24h
+                    </span>
+                </div>
+                <div class="h-72">
+                    <canvas id="mainTempChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Resumo Lateral -->
+            <div class="bg-surface-container-lowest p-6 rounded-2xl soft-shadow border border-outline-variant/20 flex flex-col justify-between">
+                <h4 class="text-lg font-black text-primary uppercase mb-6">Insights</h4>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600"><span class="material-symbols-outlined text-sm">thermostat_auto</span></div>
+                        <div><p class="text-[9px] font-black uppercase text-on-surface-variant">Amplitude</p><p id="resumo-temp" class="text-sm font-bold text-primary">—</p></div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600"><span class="material-symbols-outlined text-sm">humidity_mid</span></div>
+                        <div><p class="text-[9px] font-black uppercase text-on-surface-variant">Umid. Média</p><p id="resumo-umidade" class="text-sm font-bold text-primary">—</p></div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600"><span class="material-symbols-outlined text-sm">compress</span></div>
+                        <div><p class="text-[9px] font-black uppercase text-on-surface-variant">Pres. Média</p><p id="resumo-pressao" class="text-sm font-bold text-primary">—</p></div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-4 border-t border-outline-variant/10 text-[10px] text-on-surface-variant italic">Cálculos baseados no histórico do banco de dados.</div>
+            </div>
+        </section>
+
+        <!-- Precipitação e Relatórios -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Gráfico de Chuva -->
+            <div class="bg-surface-container-lowest p-6 rounded-2xl soft-shadow border border-outline-variant/20">
+                <h4 class="text-md font-black text-primary uppercase mb-6">Volume de Chuva no Período</h4>
+                <div class="h-64">
+                    <canvas id="rainBarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Relatório -->
+            <div class="bg-[#0f172a] p-6 rounded-2xl shadow-xl relative overflow-hidden group">
+                <div class="relative z-10 h-full flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xl font-black text-secondary-fixed mb-2 uppercase italic">Relatórios Acadêmicos</h4>
+                        <p class="text-white/60 text-sm leading-relaxed">Baixe o compilado estatístico para fins de pesquisa e monitoramento do campus.</p>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button id="btnPDFAnalises" class="flex-1 py-3 bg-secondary text-white font-bold text-[10px] rounded-xl uppercase hover:scale-[1.02] transition-all">PDF Detalhado</button>
+                        <button id="btnCSVAnalises" class="flex-1 py-3 bg-white/10 border border-white/20 text-white font-bold text-[10px] rounded-xl uppercase hover:bg-white/20 transition-all">Planilha CSV</button>
+                    </div>
+                </div>
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-secondary/10 rounded-full blur-2xl"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-surface-container-low border-t border-outline-variant py-8 mt-10">
+        <div class="max-w-container-max-width mx-auto px-gutter flex flex-col md:flex-row justify-between items-center text-on-surface-variant text-xs italic">
+            <p>© 2024 ClimaJanaúba - IFNMG Janaúba.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-primary transition-colors">IFNMG</a>
+                <a href="#" class="hover:text-primary transition-colors">Termos</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÓGICA FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getDatabase, ref, query, limitToLast, onValue
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPmBG8YkkKF1gJabX5__ZkMEmIQ72LyGo",
+            authDomain: "climajanas.firebaseapp.com",
+            databaseURL: "https://climajanas-default-rtdb.firebaseio.com",
+            projectId: "climajanas",
+            storageBucket: "climajanas.firebasestorage.app",
+            messagingSenderId: "159219853939",
+            appId: "1:159219853939:web:c89231df302d506436d806"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let todasLeituras = [];      // todas as leituras do Firebase (ordenadas)
+        let dadosAnalise = [];       // leituras filtradas (usadas nos cards/exports)
+
+        /*
+        ============================================================
+        UTILITÁRIOS DE DATA
+        ============================================================
+        */
+        function timestampParaMs(ts, idx, total) {
+            const n = Number(ts);
+            if (n >= 1e9) return n < 1e12 ? n * 1000 : n;
+            const agora = Date.now();
+            const intervalo = 5 * 60 * 1000;
+            return agora - (total - 1 - idx) * intervalo;
+        }
+
+        function formatarHora(dataMs) {
+            return new Date(dataMs).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+        }
+
+        function formatarDataHora(dataMs) {
+            return new Date(dataMs).toLocaleString("pt-BR", {
+                day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
+            });
+        }
+
+        function formatarDiaMes(dataMs) {
+            return new Date(dataMs).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+        }
+
+        function chaveDia(dataMs) {
+            const d = new Date(dataMs);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        }
+
+        function inicioDoDia(dateStr) {
+            return new Date(dateStr + "T00:00:00").getTime();
+        }
+
+        function fimDoDia(dateStr) {
+            return new Date(dateStr + "T23:59:59").getTime();
+        }
+
+        /*
+        ============================================================
+        AGRUPAMENTO POR DIA
+        ============================================================
+        */
+        function agruparPorDia(entries) {
+            const grupos = new Map();
+
+            entries.forEach(e => {
+                const chave = chaveDia(e.dataMs);
+                if (!grupos.has(chave)) {
+                    grupos.set(chave, {
+                        dataMs: e.dataMs,
+                        count: 0,
+                        temperatura: 0,
+                        umidade: 0,
+                        pressao: 0,
+                        chuva: 0
+                    });
+                }
+                const g = grupos.get(chave);
+                g.count++;
+                g.temperatura += e.temperatura;
+                g.umidade     += e.umidade;
+                g.pressao     += e.pressao;
+                g.chuva       += e.chuva;
+            });
+
+            return Array.from(grupos.values())
+                .sort((a, b) => a.dataMs - b.dataMs)
+                .map(g => ({
+                    dataMs: g.dataMs,
+                    temperatura: g.temperatura / g.count,
+                    umidade: g.umidade / g.count,
+                    pressao: g.pressao / g.count,
+                    chuva: g.chuva
+                }));
+        }
+
+        /*
+        ============================================================
+        GRÁFICOS
+        ============================================================
+        */
+        const ctxT = document.getElementById('mainTempChart').getContext('2d');
+        const gradT = ctxT.createLinearGradient(0, 0, 0, 300);
+        gradT.addColorStop(0, '#ba1a1a22');
+        gradT.addColorStop(1, '#ba1a1a00');
+
+        const chartT = new Chart(ctxT, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    borderColor: '#ba1a1a',
+                    borderWidth: 3,
+                    fill: true,
+                    backgroundColor: gradT,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    data: []
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: (items) => items.length ? items[0].label : "",
+                            label: (item) => `${Number(item.parsed.y).toFixed(1)} °C`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        ticks: { maxTicksLimit: 8, font: { size: 10 }, color: '#75777e' },
+                        grid: { display: false }
+                    },
+                    y: { grid: { color: '#f1f1f1' }, ticks: { font: { size: 10 } } }
+                }
+            }
+        });
+
+        const ctxC = document.getElementById('rainBarChart').getContext('2d');
+        const gradC = ctxC.createLinearGradient(0, 0, 0, 300);
+        gradC.addColorStop(0, '#1e3a8a');
+        gradC.addColorStop(1, '#3b82f6');
+
+        const chartC = new Chart(ctxC, {
+            type: 'bar',
+            plugins: [ChartDataLabels],
+            data: {
+                labels: [],
+                datasets: [{ backgroundColor: gradC, borderRadius: 6, data: [] }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        color: '#1e3a8a',
+                        anchor: 'end',
+                        align: 'top',
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (v) => v > 0 ? v.toFixed(1) + 'mm' : ''
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { display: false, beginAtZero: true }
+                }
+            }
+        });
+
+        /*
+        ============================================================
+        CONTROLE DO FILTRO
+        ============================================================
+        */
+        const periodoAnalise = document.getElementById("periodoAnalise");
+        const diaEspecifico = document.getElementById("diaEspecifico");
+        const wrapDiaEspecifico = document.getElementById("wrapDiaEspecifico");
+        const infoFiltroAnalise = document.getElementById("infoFiltroAnalise");
+        const labelPeriodoGrafico = document.getElementById("labelPeriodoGrafico");
+
+        function atualizarCamposFiltro() {
+            const v = periodoAnalise.value;
+            if (v === "dia") {
+                wrapDiaEspecifico.classList.remove("hidden");
+                // Se ainda não tem data, preenche com a data da última leitura
+                if (!diaEspecifico.value && todasLeituras.length) {
+                    const d = new Date(todasLeituras[todasLeituras.length - 1].dataMs);
+                    const pad = n => String(n).padStart(2, "0");
+                    diaEspecifico.value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+                }
+            } else {
+                wrapDiaEspecifico.classList.add("hidden");
+            }
+        }
+
+        periodoAnalise.addEventListener("change", () => {
+            atualizarCamposFiltro();
+            aplicarFiltro();
+        });
+
+        diaEspecifico.addEventListener("change", aplicarFiltro);
+
+        /*
+        ============================================================
+        FILTRAGEM
+        ============================================================
+        */
+        function obterDadosFiltrados() {
+            const v = periodoAnalise.value;
+            const agora = Date.now();
+
+            if (v === "24h") {
+                const limite = agora - 24 * 60 * 60 * 1000;
+                return todasLeituras.filter(d => d.dataMs >= limite);
+            }
+
+            if (v === "7d") {
+                const limite = agora - 7 * 24 * 60 * 60 * 1000;
+                return todasLeituras.filter(d => d.dataMs >= limite);
+            }
+
+            if (v === "dia") {
+                if (!diaEspecifico.value) return [];
+                const ini = inicioDoDia(diaEspecifico.value);
+                const fim = fimDoDia(diaEspecifico.value);
+                return todasLeituras.filter(d => d.dataMs >= ini && d.dataMs <= fim);
+            }
+
+            return todasLeituras;
+        }
+
+        /*
+        ============================================================
+        APLICA O FILTRO E RENDERIZA TUDO
+        ============================================================
+        */
+        function aplicarFiltro() {
+            const filtrados = obterDadosFiltrados();
+            const v = periodoAnalise.value;
+
+            // Label do gráfico (canto superior direito)
+            if (v === "24h") labelPeriodoGrafico.textContent = "Últimas 24h";
+            else if (v === "7d") labelPeriodoGrafico.textContent = "Últimos 7 dias";
+            else if (v === "dia") labelPeriodoGrafico.textContent = diaEspecifico.value ? `Dia ${formatarDiaMes(inicioDoDia(diaEspecifico.value))}` : "Dia específico";
+
+            if (!filtrados.length) {
+                infoFiltroAnalise.textContent = "Nenhum dado no período selecionado.";
+                infoFiltroAnalise.className = "mt-3 text-xs text-red-600 font-bold";
+
+                ["temp-media", "temp-maxima", "temp-minima", "chuva-mes"].forEach(id => {
+                    document.getElementById(id).innerText = "—";
+                });
+                document.getElementById('resumo-temp').innerText = "—";
+                document.getElementById('resumo-umidade').innerText = "—";
+                document.getElementById('resumo-pressao').innerText = "—";
+
+                chartT.data.labels = [];
+                chartT.data.datasets[0].data = [];
+                chartT.update('none');
+
+                chartC.data.labels = [];
+                chartC.data.datasets[0].data = [];
+                chartC.update('none');
+
+                dadosAnalise = [];
+                return;
+            }
+
+            dadosAnalise = filtrados;
+
+            // -------- Cards --------
+            const temps = filtrados.map(l => l.temperatura);
+            const max = Math.max(...temps);
+            const min = Math.min(...temps);
+
+            const grupos = agruparPorDia(filtrados);
+            const mediaDasMedias = grupos.length
+                ? grupos.reduce((s, g) => s + g.temperatura, 0) / grupos.length
+                : 0;
+            const umidMediaDasMedias = grupos.length
+                ? grupos.reduce((s, g) => s + g.umidade, 0) / grupos.length
+                : 0;
+            const presMediaDasMedias = grupos.length
+                ? grupos.reduce((s, g) => s + g.pressao, 0) / grupos.length
+                : 0;
+
+            const totalChuva = filtrados.reduce((s, l) => s + l.chuva, 0);
+
+            document.getElementById('temp-media').innerText = `${mediaDasMedias.toFixed(1)}°C`;
+            document.getElementById('temp-maxima').innerText = `${max.toFixed(1)}°C`;
+            document.getElementById('temp-minima').innerText = `${min.toFixed(1)}°C`;
+            document.getElementById('chuva-mes').innerText = `${totalChuva.toFixed(1)}mm`;
+            document.getElementById('resumo-temp').innerText = `${(max - min).toFixed(1)}°C de amplitude`;
+            document.getElementById('resumo-umidade').innerText = `${umidMediaDasMedias.toFixed(0)}%`;
+            document.getElementById('resumo-pressao').innerText = `${presMediaDasMedias.toFixed(0)} hPa`;
+
+            const inicioTxt = formatarDataHora(filtrados[0].dataMs);
+            const fimTxt = formatarDataHora(filtrados[filtrados.length - 1].dataMs);
+            infoFiltroAnalise.textContent =
+                `${filtrados.length} leitura(s) • ${grupos.length} dia(s) • de ${inicioTxt} até ${fimTxt}. ` +
+                `Média/Dia = média das médias diárias. Chuva = soma do período.`;
+            infoFiltroAnalise.className = "mt-3 text-xs text-on-surface-variant";
+
+            // -------- Gráfico de temperatura (respeita filtro) --------
+            if (v === "24h" || v === "dia") {
+                // Série temporal com labels de hora
+                chartT.data.labels = filtrados.map(d => formatarHora(d.dataMs));
+                chartT.data.datasets[0].data = filtrados.map(d => Number(d.temperatura.toFixed(2)));
+            } else {
+                // 7d → agrupado por dia (média diária)
+                chartT.data.labels = grupos.map(g => formatarDiaMes(g.dataMs));
+                chartT.data.datasets[0].data = grupos.map(g => Number(g.temperatura.toFixed(2)));
+            }
+            chartT.update('none');
+
+            // -------- Gráfico de chuva (por dia) --------
+            chartC.data.labels = grupos.map(g => formatarDiaMes(g.dataMs));
+            chartC.data.datasets[0].data = grupos.map(g => Number(g.chuva.toFixed(1)));
+            chartC.update('none');
+        }
+
+        /*
+        ============================================================
+        FIREBASE REAL-TIME (limitToLast)
+        ============================================================
+        */
+        const leiturasRef = query(ref(db, 'leituras'), limitToLast(5000));
+
+        onValue(leiturasRef, (snapshot) => {
+            const data = snapshot.val();
+            if (!data) return;
+
+            const chaves = Object.keys(data);
+            const total = chaves.length;
+
+            todasLeituras = chaves.map((key, idx) => {
+                const item = data[key];
+                return {
+                    dataMs: timestampParaMs(item.timestamp ?? item.data, idx, total),
+                    temperatura: Number(item.temperatura ?? 0),
+                    umidade: Number(item.umidade ?? 0),
+                    pressao: Number(item.pressao ?? 0),
+                    chuva: Number(item.chuva ?? 0)
+                };
+            }).sort((a, b) => a.dataMs - b.dataMs);
+
+            // Preenche o campo "dia específico" com a data mais recente
+            atualizarCamposFiltro();
+
+            aplicarFiltro();
+        });
+
+        document.getElementById("btnAplicarFiltroAnalise").addEventListener("click", aplicarFiltro);
+
+        /*
+        ============================================================
+        EXPORTAÇÃO PDF E CSV
+        ============================================================
+        */
+        function escaparCSVAnalise(valor) {
+            const texto = String(valor ?? "").replace(/"/g, '""');
+            return `"${texto}"`;
+        }
+
+        function nomeArquivoAnalise() {
+            const agora = new Date();
+            const pad = n => String(n).padStart(2, "0");
+            return `${agora.getFullYear()}-${pad(agora.getMonth() + 1)}-${pad(agora.getDate())}_${pad(agora.getHours())}-${pad(agora.getMinutes())}`;
+        }
+
+        function descricaoPeriodo() {
+            const v = periodoAnalise.value;
+            if (v === "24h") return "Últimas 24 horas";
+            if (v === "7d") return "Últimos 7 dias";
+            if (v === "dia") return `Dia ${diaEspecifico.value || "—"}`;
+            return "—";
+        }
+
+        function exportarCSVAnalises() {
+            if (!dadosAnalise.length) { alert("Não há dados no filtro atual."); return; }
+
+            const linhas = [
+                ["Data/Hora", "Temperatura (°C)", "Umidade (%)", "Pressão (hPa)", "Chuva (mm)"],
+                ...dadosAnalise.map(d => [
+                    formatarDataHora(d.dataMs),
+                    d.temperatura.toFixed(1),
+                    d.umidade.toFixed(0),
+                    d.pressao.toFixed(0),
+                    d.chuva.toFixed(1)
+                ])
+            ];
+
+            const csv = "\uFEFF" + linhas.map(l => l.map(escaparCSVAnalise).join(";")).join("\r\n");
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `ClimaJanauba_Analises_${nomeArquivoAnalise()}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportarPDFAnalises() {
+            if (!dadosAnalise.length) { alert("Não há dados no filtro atual."); return; }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+            const margem = 14;
+            const dataGeracao = new Date().toLocaleString("pt-BR");
+
+            const temps = dadosAnalise.map(l => l.temperatura);
+            const max = Math.max(...temps);
+            const min = Math.min(...temps);
+            const grupos = agruparPorDia(dadosAnalise);
+            const mediaDasMedias = grupos.length ? grupos.reduce((s, g) => s + g.temperatura, 0) / grupos.length : 0;
+            const uAvg = grupos.length ? grupos.reduce((s, g) => s + g.umidade, 0) / grupos.length : 0;
+            const pAvg = grupos.length ? grupos.reduce((s, g) => s + g.pressao, 0) / grupos.length : 0;
+            const totalChuva = dadosAnalise.reduce((s, l) => s + l.chuva, 0);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(20);
+            doc.text("ClimaJanaúba", margem, 18);
+
+            doc.setFontSize(15);
+            doc.text("Relatório de Análises Climáticas", margem, 27);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(9);
+            doc.text(`Gerado em: ${dataGeracao}`, margem, 34);
+            doc.text(`Período analisado: ${descricaoPeriodo()}`, margem, 39);
+            doc.text(`Registros analisados: ${dadosAnalise.length} (${grupos.length} dia(s))`, margem, 44);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.text("Resumo estatístico", margem, 54);
+
+            doc.autoTable({
+                startY: 58,
+                head: [["Indicador", "Resultado"]],
+                body: [
+                    ["Temperatura média (média das médias diárias)", `${mediaDasMedias.toFixed(1)} °C`],
+                    ["Temperatura máxima", `${max.toFixed(1)} °C`],
+                    ["Temperatura mínima", `${min.toFixed(1)} °C`],
+                    ["Amplitude térmica", `${(max - min).toFixed(1)} °C`],
+                    ["Umidade média", `${uAvg.toFixed(0)} %`],
+                    ["Pressão média", `${pAvg.toFixed(0)} hPa`],
+                    ["Chuva acumulada no período", `${totalChuva.toFixed(1)} mm`]
+                ],
+                theme: "grid",
+                styles: { fontSize: 9, cellPadding: 2.5 },
+                headStyles: { fillColor: [0, 110, 47], textColor: 255, fontStyle: "bold" },
+                margin: { left: margem, right: margem }
+            });
+
+            let y = doc.lastAutoTable.finalY + 10;
+
+            try {
+                const imgT = chartT.toBase64Image("image/png", 1);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text("Curva térmica", margem, y);
+                y += 4;
+                doc.addImage(imgT, "PNG", margem, y, 182, 72);
+                y += 82;
+            } catch (e) { console.warn(e); }
+
+            doc.addPage();
+            y = 18;
+
+            try {
+                const imgC = chartC.toBase64Image("image/png", 1);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text("Chuva por dia", margem, y);
+                y += 4;
+                doc.addImage(imgC, "PNG", margem, y, 182, 70);
+                y += 80;
+            } catch (e) { console.warn(e); }
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(11);
+            doc.text("Dados utilizados na análise", margem, y);
+
+            const body = dadosAnalise.map(d => [
+                formatarDataHora(d.dataMs),
+                d.temperatura.toFixed(1),
+                d.umidade.toFixed(0),
+                d.pressao.toFixed(0),
+                d.chuva.toFixed(1)
+            ]);
+
+            doc.autoTable({
+                startY: y + 4,
+                head: [["Data / Hora", "Temp. (°C)", "Umidade (%)", "Pressão (hPa)", "Chuva (mm)"]],
+                body,
+                theme: "grid",
+                styles: { fontSize: 7, cellPadding: 1.8 },
+                headStyles: { fillColor: [0, 110, 47], textColor: 255, fontStyle: "bold" },
+                alternateRowStyles: { fillColor: [245, 243, 245] },
+                margin: { left: margem, right: margem }
+            });
+
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(8);
+                doc.setTextColor(100);
+                doc.text(`ClimaJanaúba • IFNMG Janaúba • Página ${i}/${pageCount}`, margem, 290);
+            }
+
+            doc.save(`ClimaJanauba_Analises_${nomeArquivoAnalise()}.pdf`);
+        }
+
+        document.getElementById("btnCSVAnalises").addEventListener("click", exportarCSVAnalises);
+        document.getElementById("btnPDFAnalises").addEventListener("click", exportarPDFAnalises);
+    </script>
+</body>
+</html>

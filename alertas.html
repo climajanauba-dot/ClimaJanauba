@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<title>ClimaJanaúba - Alertas Meteorológicos</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<script id="tailwind-config">
+tailwind.config = {
+    darkMode: "class",
+
+    theme: {
+        extend: {
+
+            colors: {
+                "secondary-fixed": "#6bff8f",
+                "on-tertiary-fixed": "#291800",
+                "on-surface": "#1b1b1d",
+                "error-container": "#ffdad6",
+                "on-background": "#1b1b1d",
+                "on-error-container": "#93000a",
+                "on-secondary-fixed": "#002109",
+                "surface-dim": "#dbd9db",
+                "outline-variant": "#c5c6cd",
+                "surface-container-low": "#f5f3f5",
+                "secondary": "#006e2f",
+                "on-secondary-fixed-variant": "#005321",
+                "surface-variant": "#e4e2e4",
+                "background": "#fbf8fb",
+                "on-tertiary-fixed-variant": "#5a4221",
+                "surface": "#fbf8fb",
+                "on-primary-fixed": "#0e1b31",
+                "secondary-container": "#6bff8f",
+                "on-secondary": "#ffffff",
+                "outline": "#75777e",
+                "inverse-surface": "#303032",
+                "on-secondary-container": "#007432",
+                "tertiary-container": "#2b1900",
+                "tertiary-fixed-dim": "#e3c196",
+                "surface-container-high": "#eae7ea",
+                "surface-tint": "#525f78",
+                "primary-container": "#101d33",
+                "primary-fixed": "#d7e3ff",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#f0edef",
+                "secondary-fixed-dim": "#4ae176",
+                "error": "#ba1a1a",
+                "on-primary-container": "#7985a0",
+                "on-primary-fixed-variant": "#3b475f",
+                "on-surface-variant": "#45474d",
+                "inverse-primary": "#bac7e4",
+                "tertiary": "#050200",
+                "surface-container-highest": "#e4e2e4",
+                "on-error": "#ffffff",
+                "on-tertiary-container": "#9d8059",
+                "primary-fixed-dim": "#bac7e4",
+                "on-primary": "#ffffff",
+                "tertiary-fixed": "#ffddb4",
+                "primary": "#00030c",
+                "on-tertiary": "#ffffff",
+                "inverse-on-surface": "#f2f0f2",
+                "surface-bright": "#fbf8fb"
+            },
+
+            borderRadius: {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+
+            spacing: {
+                "card-padding": "1.25rem",
+                "container-max-width": "1440px",
+                "gutter": "1.5rem",
+                "stack-gap": "1rem",
+                "section-margin": "2.5rem"
+            },
+
+            fontFamily: {
+                "label-sm": ["Hanken Grotesk"],
+                "body-md": ["Hanken Grotesk"],
+                "headline-md": ["Hanken Grotesk"],
+                "label-md": ["Hanken Grotesk"],
+                "display-lg": ["Hanken Grotesk"],
+                "headline-lg": ["Hanken Grotesk"],
+                "body-lg": ["Hanken Grotesk"]
+            },
+
+            fontSize: {
+                "label-sm": ["12px", {
+                    "lineHeight": "16px",
+                    "fontWeight": "600"
+                }],
+
+                "body-md": ["16px", {
+                    "lineHeight": "24px",
+                    "fontWeight": "400"
+                }],
+
+                "headline-md": ["24px", {
+                    "lineHeight": "32px",
+                    "fontWeight": "600"
+                }],
+
+                "label-md": ["14px", {
+                    "lineHeight": "20px",
+                    "fontWeight": "500"
+                }],
+
+                "display-lg": ["48px", {
+                    "lineHeight": "56px",
+                    "letterSpacing": "-0.02em",
+                    "fontWeight": "700"
+                }],
+
+                "headline-lg": ["32px", {
+                    "lineHeight": "40px",
+                    "fontWeight": "600"
+                }],
+
+                "body-lg": ["18px", {
+                    "lineHeight": "28px",
+                    "fontWeight": "400"
+                }]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+
+body {
+    font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+}
+
+.custom-shadow {
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.05),
+        0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+
+/* Garante que o conteúdo nunca fique escondido atrás da navbar */
+html {
+    scroll-padding-top: 80px;
+}
+
+</style>
+
+</head>
+
+
+<body class="bg-background text-on-surface flex flex-col min-h-screen">
+
+<!-- ========================================================= -->
+<!-- NAVBAR (IDENTICA AO INDEX) -->
+<!-- ========================================================= -->
+
+<header class="fixed top-0 left-0 w-full h-20 bg-surface/80 backdrop-blur-md border-b border-outline-variant z-[100]">
+
+    <nav class="flex justify-between items-center w-full px-gutter max-w-container-max-width mx-auto h-full">
+
+        <div class="flex items-center gap-2">
+
+            <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+
+            <span class="text-headline-md font-bold text-primary">ClimaJanaúba</span>
+
+        </div>
+
+
+        <div class="hidden md:flex items-center gap-6">
+
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="index.html">Home</a>
+
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="dashboards.html">Dashboard</a>
+
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="historico.html">Histórico</a>
+
+            <a class="font-label-md text-secondary font-bold border-b-2 border-secondary pb-1" href="alertas.html">Alertas</a>
+
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="analises.html">Análises</a>
+
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="documentacao.html">Sobre</a>
+
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="equipe.html">Equipe</a>
+
+        </div>
+
+
+        <a href="dashboards.html" class="bg-secondary text-on-secondary px-6 py-2 rounded-lg font-label-md hover:shadow-lg transition-all">Acessar Painel</a>
+
+    </nav>
+
+</header>
+
+
+<div class="h-20"></div>
+
+
+<main class="max-w-container-max-width mx-auto px-6 md:px-10 py-10 w-full flex-1">
+
+
+    <!-- ALERTS SUMMARY -->
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+        <div class="bg-white p-6 rounded-xl custom-shadow border-l-4 border-error flex items-start gap-4 transition-transform hover:-translate-y-1">
+            <div class="w-12 h-12 rounded-lg bg-error-container flex items-center justify-center text-error shrink-0">
+                <span class="material-symbols-outlined text-3xl">warning</span>
+            </div>
+            <div>
+                <div class="flex items-baseline gap-2">
+                    <span id="count-critico" class="font-headline-md text-headline-md text-on-surface">0</span>
+                    <span class="font-label-md text-label-md text-on-surface-variant">Severos</span>
+                </div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Nível de Perigo</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl custom-shadow border-l-4 border-amber-500 flex items-start gap-4 transition-transform hover:-translate-y-1">
+            <div class="w-12 h-12 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+                <span class="material-symbols-outlined text-3xl">error</span>
+            </div>
+            <div>
+                <div class="flex items-baseline gap-2">
+                    <span id="count-moderado" class="font-headline-md text-headline-md text-on-surface">0</span>
+                    <span class="font-label-md text-label-md text-on-surface-variant">Atenção</span>
+                </div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Nível Laranja</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl custom-shadow border-l-4 border-blue-500 flex items-start gap-4 transition-transform hover:-translate-y-1">
+            <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                <span class="material-symbols-outlined text-3xl">info</span>
+            </div>
+            <div>
+                <div class="flex items-baseline gap-2">
+                    <span id="count-info" class="font-headline-md text-headline-md text-on-surface">0</span>
+                    <span class="font-label-md text-label-md text-on-surface-variant">Gerais</span>
+                </div>
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mt-1">Condições Locais</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- LISTA DE ALERTAS -->
+
+    <section class="bg-white rounded-xl custom-shadow overflow-hidden">
+        <div class="px-6 py-4 border-b border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-surface-container-low">
+            <h2 class="font-headline-md text-headline-md text-primary">Avisos Meteorológicos Ativos</h2>
+            <p class="text-xs text-on-surface-variant font-bold uppercase tracking-widest">Janaúba e Região</p>
+        </div>
+
+        <div id="lista-alertas" class="divide-y divide-outline-variant">
+            <div class="p-10 text-center text-on-surface-variant italic">Analisando dados atmosféricos...</div>
+        </div>
+    </section>
+
+
+    <div class="mt-8 flex justify-center">
+        <button id="btnAtualizar" onclick="buscarAlertas()" class="bg-secondary text-on-secondary px-8 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-on-secondary-container transition-all active:scale-95">
+            <span class="material-symbols-outlined">refresh</span> Sincronizar Agora
+        </button>
+    </div>
+
+</main>
+
+
+<footer class="bg-surface-container-low border-t border-outline-variant py-8 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4 text-on-surface-variant">
+    <p class="font-label-sm text-label-sm italic text-xs">© 2024 ClimaJanaúba - Dados processados via Weather API.</p>
+    <div class="flex gap-6 italic text-xs font-bold text-secondary uppercase text-right">
+        <span>Monitoramento em Tempo Real - Janaúba-MG</span>
+    </div>
+</footer>
+
+
+<script>
+
+async function buscarAlertas() {
+    const lista = document.getElementById('lista-alertas');
+    const cCritico = document.getElementById('count-critico');
+    const cModerado = document.getElementById('count-moderado');
+    const cInfo = document.getElementById('count-info');
+    const btn = document.getElementById('btnAtualizar');
+
+    btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Sincronizando...';
+    btn.disabled = true;
+
+    try {
+        const apiKey = '22ab288fa3d5437c92a195023262208'; 
+        const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=Janauba,MG,BR&alerts=yes&lang=pt`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        lista.innerHTML = '';
+        let criticos = 0, moderados = 0, informativos = 0;
+
+        // --- 1. LÓGICA DE NEBLINA (CONDIÇÃO ATUAL) ---
+        const condicao = data.current.condition.text.toLowerCase();
+        if (condicao.includes("neblina") || condicao.includes("fog") || condicao.includes("nevoeiro")) {
+            informativos++;
+            lista.insertAdjacentHTML('beforeend', gerarHtmlAlerta("Presença de Neblina", `Visibilidade reduzida em Janaúba. Condição atual: ${data.current.condition.text}.`, "Informativo (Azul)", "text-blue-500"));
+        }
+
+        // --- 2. LÓGICA DE UMIDADE LARANJA ---
+        const umid = data.current.humidity;
+        if (umid <= 30) {
+            moderados++;
+            let severidadeUmid = umid <= 20 ? "Perigo (Vermelho)" : "Atenção (Laranja)";
+            let corUmid = umid <= 20 ? "text-error" : "text-amber-600";
+            lista.insertAdjacentHTML('beforeend', gerarHtmlAlerta("Baixa Umidade Relativa", `A umidade em Janaúba está em ${umid}%. Nível de alerta para saúde respiratória. Beba água.`, severidadeUmid, corUmid));
+        }
+
+        // --- 3. ALERTAS OFICIAIS DO FEED ---
+        if (data.alerts && data.alerts.alert.length > 0) {
+            data.alerts.alert.forEach(aviso => {
+                let cor = "text-amber-500";
+                if (aviso.severity.toLowerCase().includes("severe")) { criticos++; cor = "text-error"; }
+                else { moderados++; cor = "text-amber-500"; }
+                
+                lista.insertAdjacentHTML('beforeend', gerarHtmlAlerta(aviso.headline, aviso.desc, "Aviso Oficial", cor));
+            });
+        }
+
+        // --- 4. TUDO LIMPO ---
+        if (lista.innerHTML === '') {
+            lista.innerHTML = `
+                <div class="p-16 text-center flex flex-col items-center gap-4">
+                    <span class="material-symbols-outlined text-secondary text-6xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    <p class="font-black text-primary text-xl uppercase">Céu limpo em Janaúba!</p>
+                    <p class="text-on-surface-variant">Sem alertas meteorológicos ou condições adversas no momento.</p>
+                </div>`;
+        }
+
+        cCritico.innerText = criticos;
+        cModerado.innerText = moderados;
+        cInfo.innerText = informativos;
+
+    } catch (error) {
+        console.error("Erro:", error);
+        lista.innerHTML = `<div class="p-10 text-center text-red-500 font-bold uppercase">Erro ao carregar dados. Verifique a chave da API.</div>`;
+    } finally {
+        btn.innerHTML = '<span class="material-symbols-outlined">refresh</span> Sincronizar Agora';
+        btn.disabled = false;
+    }
+}
+
+function gerarHtmlAlerta(titulo, desc, severidade, corIcone) {
+    return `
+        <div class="p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:bg-surface-container-low transition-colors group">
+            <div class="flex items-start gap-4">
+                <div class="mt-1 shrink-0"><span class="material-symbols-outlined ${corIcone}" style="font-variation-settings: 'FILL' 1;">report</span></div>
+                <div>
+                    <h3 class="text-body-md font-black text-on-surface uppercase">${titulo}</h3>
+                    <p class="text-label-md text-on-surface-variant leading-tight mt-1">${desc}</p>
+                    <p class="text-[10px] font-bold mt-2 text-secondary uppercase tracking-widest">${severidade}</p>
+                </div>
+            </div>
+            <div class="text-right shrink-0">
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase italic">Tempo Real</p>
+            </div>
+        </div>
+    `;
+}
+
+buscarAlertas();
+
+</script>
+
+</body>
+</html>

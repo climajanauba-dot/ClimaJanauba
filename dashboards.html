@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+<title>ClimaJanaúba - Dashboard</title>
+<link rel="icon" type="image/png" href="img/favicon.png">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<!-- Biblioteca para os Gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                "secondary-fixed": "#6bff8f",
+                "on-tertiary-fixed": "#291800",
+                "on-surface": "#1b1b1d",
+                "error-container": "#ffdad6",
+                "on-background": "#1b1b1d",
+                "on-error-container": "#93000a",
+                "on-secondary-fixed": "#002109",
+                "surface-dim": "#dbd9db",
+                "outline-variant": "#c5c6cd",
+                "surface-container-low": "#f5f3f5",
+                "secondary": "#006e2f",
+                "on-secondary-fixed-variant": "#005321",
+                "surface-variant": "#e4e2e4",
+                "background": "#fbf8fb",
+                "on-tertiary-fixed-variant": "#5a4221",
+                "surface": "#fbf8fb",
+                "on-primary-fixed": "#0e1b31",
+                "secondary-container": "#6bff8f",
+                "on-secondary": "#ffffff",
+                "outline": "#75777e",
+                "inverse-surface": "#303032",
+                "on-secondary-container": "#007432",
+                "tertiary-container": "#2b1900",
+                "tertiary-fixed-dim": "#e3c196",
+                "surface-container-high": "#eae7ea",
+                "surface-tint": "#525f78",
+                "primary-container": "#101d33",
+                "primary-fixed": "#d7e3ff",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#f0edef",
+                "secondary-fixed-dim": "#4ae176",
+                "error": "#ba1a1a",
+                "on-primary-container": "#7985a0",
+                "on-primary-fixed-variant": "#3b475f",
+                "on-surface-variant": "#45474d",
+                "inverse-primary": "#bac7e4",
+                "tertiary": "#050200",
+                "surface-container-highest": "#e4e2e4",
+                "on-error": "#ffffff",
+                "on-tertiary-container": "#9d8059",
+                "primary-fixed-dim": "#bac7e4",
+                "on-primary": "#ffffff",
+                "tertiary-fixed": "#ffddb4",
+                "primary": "#00030c",
+                "on-tertiary": "#ffffff",
+                "inverse-on-surface": "#f2f0f2",
+                "surface-bright": "#fbf8fb"
+            },
+            borderRadius: {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            spacing: {
+                "card-padding": "1.25rem",
+                "container-max-width": "1440px",
+                "gutter": "1.5rem",
+                "stack-gap": "1rem",
+                "section-margin": "2.5rem",
+                "sidebar-width": "260px"
+            },
+            fontFamily: {
+                "label-sm": ["Hanken Grotesk"],
+                "body-md": ["Hanken Grotesk"],
+                "headline-md": ["Hanken Grotesk"],
+                "label-md": ["Hanken Grotesk"],
+                "display-lg": ["Hanken Grotesk"],
+                "headline-lg": ["Hanken Grotesk"],
+                "body-lg": ["Hanken Grotesk"]
+            },
+            fontSize: {
+                "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+            }
+        }
+    }
+}
+</script>
+
+<style>
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.filled-icon {
+    font-variation-settings: 'FILL' 1;
+}
+body {
+    background-color: #fbf8fb;
+    font-family: 'Hanken Grotesk', sans-serif;
+}
+.soft-shadow {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+.sidebar-active {
+    background-color: rgba(121, 133, 160, 0.15);
+    color: #6bff8f;
+    border-left: 4px solid #6bff8f;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #c5c6cd; border-radius: 10px; }
+</style>
+</head>
+
+
+<body class="flex min-h-screen">
+
+<!-- ========================================================= -->
+<!-- NAVBAR -->
+<!-- ========================================================= -->
+
+<header class="fixed top-0 left-0 w-full h-20 bg-surface/80 backdrop-blur-md border-b border-outline-variant z-[100]">
+    <nav class="flex justify-between items-center w-full px-gutter max-w-container-max-width mx-auto h-full">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+            <span class="text-headline-md font-bold text-primary">ClimaJanaúba</span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-6">
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="index.html">Home</a>
+            <a class="font-label-md text-secondary font-bold border-b-2 border-secondary pb-1" href="dashboards.html">Dashboard</a>
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="historico.html">Histórico</a>
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="alertas.html">Alertas</a>
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="analises.html">Análises</a>
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="documentacao.html">Sobre</a>
+            <a class="font-label-md text-on-surface-variant hover:text-secondary transition-colors" href="equipe.html">Contato</a>
+        </div>
+
+        <a href="dashboards.html" class="bg-secondary text-on-secondary px-6 py-2 rounded-lg font-label-md hover:shadow-lg transition-all">
+            Acessar Painel
+        </a>
+    </nav>
+</header>
+
+
+<!-- ========================================================= -->
+<!-- MAIN -->
+<!-- ========================================================= -->
+
+<main class="flex-1 pt-28 px-10 pb-10 bg-background min-h-screen">
+<div class="max-w-[1440px] mx-auto">
+
+<!-- HEADER DO DASHBOARD -->
+<header class="flex justify-between items-end mb-8">
+    <div>
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Dashboard</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">
+            Acompanhe os dados em tempo real da estação meteorológica.
+        </p>
+    </div>
+
+    <div class="flex flex-col items-end gap-2">
+        <div class="flex items-center gap-2 bg-secondary-container/30 px-3 py-1 rounded-full border border-secondary/20">
+            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            <span class="font-label-sm text-label-sm text-secondary">Captando Dados</span>
+        </div>
+        <p class="font-label-sm text-label-sm text-on-surface-variant">
+            Última atualização:
+            <span id="lastUpdate" class="font-bold">Aguardando dados...</span>
+        </p>
+    </div>
+</header>
+
+
+<!-- CARDS DE RESUMO -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+    <!-- TEMPERATURA -->
+    <div class="bg-surface-container-lowest p-card-padding rounded-xl soft-shadow border border-outline-variant/30 group hover:-translate-y-1 transition-all">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-orange-600" style="font-variation-settings: 'FILL' 1;">thermostat</span>
+            </div>
+            <span id="temperatureChange" class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">—</span>
+        </div>
+        <div class="flex flex-col">
+            <span id="temperatureValue" class="font-display-lg text-display-lg text-on-surface">
+                -- <span class="text-headline-md font-normal">°C</span>
+            </span>
+            <span class="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Temperatura</span>
+        </div>
+    </div>
+
+    <!-- UMIDADE -->
+    <div class="bg-surface-container-lowest p-card-padding rounded-xl soft-shadow border border-outline-variant/30 group hover:-translate-y-1 transition-all">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-blue-600" style="font-variation-settings: 'FILL' 1;">humidity_percentage</span>
+            </div>
+            <span id="humidityChange" class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">—</span>
+        </div>
+        <div class="flex flex-col">
+            <span id="humidityValue" class="font-display-lg text-display-lg text-on-surface">
+                -- <span class="text-headline-md font-normal">%</span>
+            </span>
+            <span class="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Umidade</span>
+        </div>
+    </div>
+
+    <!-- CHUVA -->
+    <div class="bg-surface-container-lowest p-card-padding rounded-xl soft-shadow border border-outline-variant/30 group hover:-translate-y-1 transition-all">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">rainy</span>
+            </div>
+            <span id="rainChange" class="text-secondary font-label-sm text-label-sm flex items-center gap-1">—</span>
+        </div>
+        <div class="flex flex-col">
+            <span id="rainValue" class="font-display-lg text-display-lg text-on-surface">
+                -- <span class="text-headline-md font-normal">mm</span>
+            </span>
+            <span class="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Chuva</span>
+        </div>
+    </div>
+
+    <!-- PRESSÃO -->
+    <div class="bg-surface-container-lowest p-card-padding rounded-xl soft-shadow border border-outline-variant/30 group hover:-translate-y-1 transition-all">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-indigo-600" style="font-variation-settings: 'FILL' 1;">speed</span>
+            </div>
+            <span id="pressureChange" class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">—</span>
+        </div>
+        <div class="flex flex-col">
+            <span id="pressureValue" class="font-display-lg text-display-lg text-on-surface">
+                -- <span class="text-headline-md font-normal">hPa</span>
+            </span>
+            <span class="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Pressão</span>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- GRÁFICOS -->
+<section class="grid grid-cols-12 gap-6 mb-8">
+
+    <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl soft-shadow border border-outline-variant/30 p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline-md text-headline-md text-on-surface">Análise de Dados</h3>
+            <div class="flex bg-surface-container-low p-1 rounded-xl gap-1">
+                <button id="btn24h" class="px-4 py-2 text-xs font-bold rounded-lg bg-secondary text-white transition-all">24 HORAS</button>
+                <button id="btn7d" class="px-4 py-2 text-xs font-bold rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all">7 DIAS</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8">
+
+            <div class="h-48 relative flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant mb-2 italic">Temperatura (°C)</span>
+                <div class="flex-1 w-full bg-surface-container-low rounded-lg relative overflow-hidden">
+                    <canvas id="chartTemp"></canvas>
+                </div>
+            </div>
+
+            <div class="h-48 relative flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant mb-2 italic">Umidade (%)</span>
+                <div class="flex-1 w-full bg-surface-container-low rounded-lg relative overflow-hidden">
+                    <canvas id="chartUmid"></canvas>
+                </div>
+            </div>
+
+            <div class="h-48 relative flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant mb-2 italic">Pressão (hPa)</span>
+                <div class="flex-1 w-full bg-surface-container-low rounded-lg relative overflow-hidden">
+                    <canvas id="chartPres"></canvas>
+                </div>
+            </div>
+
+            <div class="h-48 relative flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant mb-2 italic">Chuva (mm)</span>
+                <div class="flex-1 w-full bg-surface-container-low rounded-lg relative overflow-hidden">
+                    <canvas id="chartChuva"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ÚLTIMAS MEDIÇÕES -->
+    <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+
+        <div class="flex-1 bg-surface-container-lowest rounded-xl soft-shadow border border-outline-variant/30 p-6">
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-6">Últimas medições</h3>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-surface-container-low text-[10px] font-bold text-on-surface-variant uppercase">
+                        <tr>
+                            <th class="px-2 py-3 text-center">Horário</th>
+                            <th class="px-2 py-3 text-center">Temp.</th>
+                            <th class="px-2 py-3 text-center">Umidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-readings" class="divide-y divide-outline-variant/20 text-sm">
+                        <!-- PREENCHIDO PELO FIREBASE -->
+                    </tbody>
+                </table>
+            </div>
+
+            <a class="block text-center mt-6 text-secondary font-bold text-sm hover:underline italic" href="historico.html">
+                Ver histórico completo →
+            </a>
+        </div>
+
+
+        <!-- LOCALIZAÇÃO -->
+        <div class="bg-surface-container-lowest rounded-xl soft-shadow border border-outline-variant/30 overflow-hidden h-[300px] flex flex-col">
+            <div class="flex-1 relative">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.662219766943!2d-43.36716302527464!3d-15.768998322329411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x753dbca99b7b745%3A0xcfa92e395a377b92!2sIFNMG%20-%20Campus%20Avan%C3%A7ado%20Jana%C3%BAba%20(Novo%20Pr%C3%A9dio)!5e0!3m2!1spt-BR!2sbr!4v1786916479398!5m2!1spt-BR!2sbr"
+                    class="w-full h-full border-0"
+                    allowfullscreen=""
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer class="mt-section-margin py-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4 italic text-sm">
+    <p class="text-on-surface-variant opacity-70">
+        © 2024 ClimaJanaúba - Monitoramento Climático Inteligente.
+    </p>
+    <div class="flex gap-6">
+        <a class="hover:text-primary transition-colors" href="#">Privacidade</a>
+        <a class="hover:text-primary transition-colors" href="#">Termos</a>
+        <a class="hover:text-primary transition-colors" href="#">IFNMG</a>
+    </div>
+</footer>
+
+</div>
+</main>
+
+
+<!-- ========================================================= -->
+<!-- FIREBASE E LÓGICA DE GRÁFICOS -->
+<!-- ========================================================= -->
+
+<script type="module">
+
+/* ============================================================
+   IMPORTAÇÃO E CONFIGURAÇÃO
+   ============================================================ */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, query, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAPmBG8YkkKF1gJabX5__ZkMEmIQ72LyGo",
+    authDomain: "climajanas.firebaseapp.com",
+    databaseURL: "https://climajanas-default-rtdb.firebaseio.com",
+    projectId: "climajanas",
+    storageBucket: "climajanas.firebasestorage.app",
+    messagingSenderId: "159219853939",
+    appId: "1:159219853939:web:c89231df302d506436d806"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+
+/* ============================================================
+   CONVERSÃO DE TIMESTAMP
+   ============================================================ */
+
+function timestampParaMs(ts, idx, total) {
+    const n = Number(ts);
+    if (n >= 1e9) {
+        return n < 1e12 ? n * 1000 : n;
+    }
+    const agora = Date.now();
+    const intervalo = 5 * 60 * 1000; // ⚠️ pressupõe leitura a cada 5 min
+    return agora - (total - 1 - idx) * intervalo;
+}
+
+function formatarHora(dataMs) {
+    return new Date(dataMs).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
+function formatarDiaMes(dataMs) {
+    return new Date(dataMs).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+}
+
+function formatarDataHora(dataMs) {
+    return new Date(dataMs).toLocaleString("pt-BR", {
+        day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
+    });
+}
+
+
+/* ============================================================
+   AGRUPAMENTO POR DIA (modo 7 dias)
+   ⚠️ CHUVA É INCREMENTAL: soma, não média.
+   ============================================================ */
+
+function agruparPorDia(entries) {
+    const grupos = new Map();
+
+    entries.forEach(e => {
+        const d = new Date(e.dataMs);
+        const chave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+        if (!grupos.has(chave)) {
+            grupos.set(chave, {
+                dataMs: e.dataMs,
+                count: 0,
+                temperatura: 0,
+                umidade: 0,
+                pressao: 0,
+                chuvaTotal: 0
+            });
+        }
+
+        const g = grupos.get(chave);
+        g.count++;
+        g.temperatura += e.temperatura;
+        g.umidade     += e.umidade;
+        g.pressao     += e.pressao;
+        // ⚠️ chuva incremental: soma o acumulado do dia
+        g.chuvaTotal  += e.chuva;
+    });
+
+    return Array.from(grupos.values()).map(g => ({
+        dataMs: g.dataMs,
+        temperatura: g.temperatura / g.count,
+        umidade:     g.umidade / g.count,
+        pressao:     g.pressao / g.count,
+        chuva:       g.chuvaTotal
+    }));
+}
+
+
+/* ============================================================
+   CONFIGURAÇÃO DOS GRÁFICOS (CHART.JS)
+   ============================================================ */
+
+const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,              // ✅ sem animação nem na primeira renderização
+    plugins: {
+        legend: { display: false },
+        tooltip: {
+            callbacks: {
+                title: (items) => items.length ? items[0].label : ""
+            }
+        }
+    },
+    elements: { point: { radius: 0 }, line: { tension: 0.4, borderWidth: 3 } },
+    scales: {
+        x: {
+            display: true,
+            ticks: { maxTicksLimit: 8, font: { size: 10 }, color: '#75777e' },
+            grid: { display: false }
+        },
+        y: {
+            grid: { color: '#f0edef' },
+            ticks: { font: { size: 10 }, color: '#75777e' }
+        }
+    }
+};
+
+const createGradient = (ctx, color) => {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, color + '55');
+    gradient.addColorStop(1, color + '00');
+    return gradient;
+};
+
+const chartT = new Chart(document.getElementById('chartTemp').getContext('2d'), {
+    type: 'line',
+    data: { labels: [], datasets: [{
+        data: [],
+        borderColor: '#ba1a1a',
+        fill: true,
+        backgroundColor: (c) => createGradient(c.chart.ctx, '#ba1a1a')
+    }]},
+    options: commonOptions
+});
+
+const chartU = new Chart(document.getElementById('chartUmid').getContext('2d'), {
+    type: 'line',
+    data: { labels: [], datasets: [{
+        data: [],
+        borderColor: '#006e2f',
+        fill: true,
+        backgroundColor: (c) => createGradient(c.chart.ctx, '#006e2f')
+    }]},
+    options: commonOptions
+});
+
+const chartP = new Chart(document.getElementById('chartPres').getContext('2d'), {
+    type: 'line',
+    data: { labels: [], datasets: [{
+        data: [],
+        borderColor: '#3f51b5',
+        fill: true,
+        backgroundColor: (c) => createGradient(c.chart.ctx, '#3f51b5')
+    }]},
+    options: commonOptions
+});
+
+const chartC = new Chart(document.getElementById('chartChuva').getContext('2d'), {
+    type: 'bar',
+    data: { labels: [], datasets: [{
+        data: [],
+        backgroundColor: '#6bff8f',
+        borderRadius: 5
+    }]},
+    options: commonOptions
+});
+
+
+/* ============================================================
+   AJUSTE DINÂMICO DO EIXO Y
+   Evita que variações pequenas (ex.: 2 hPa) pareçam enormes.
+   ============================================================ */
+
+function ajustarEixoY(chart, valores, { padding = 0.1, minRange = 0, beginAtZero = false } = {}) {
+    if (!valores.length) return;
+
+    const min = Math.min(...valores);
+    const max = Math.max(...valores);
+    const range = Math.max(max - min, minRange);
+    const pad = range * padding;
+
+    chart.options.scales.y.suggestedMin = min - pad;
+    chart.options.scales.y.suggestedMax = max + pad;
+    chart.options.scales.y.beginAtZero = beginAtZero;
+}
+
+
+/* ============================================================
+   INDICADOR DE VARIAÇÃO (▲/▼)
+   ============================================================ */
+
+function formatarDelta(valor, unidade, casas) {
+    const limite = Math.pow(10, -casas) / 2;
+    if (Math.abs(valor) < limite) return "—";
+    const seta = valor > 0 ? "▲" : "▼";
+    return `${seta} ${Math.abs(valor).toFixed(casas)}${unidade}`;
+}
+
+
+/* ============================================================
+   ATUALIZAÇÃO DO DASHBOARD
+   ✅ Guarda a função de unsubscribe para não vazar listeners.
+   ============================================================ */
+
+let unsubscribeAtual = null;
+
+function updateDashboard(range) {
+    // Limpa listener anterior antes de criar um novo
+    if (unsubscribeAtual) {
+        unsubscribeAtual();
+        unsubscribeAtual = null;
+    }
+
+    const stationRef = query(ref(database, 'leituras'), limitToLast(range));
+
+    unsubscribeAtual = onValue(stationRef, (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+            console.warn("Sem dados no Firebase.");
+            document.getElementById("lastUpdate").textContent = "Sem dados";
+            return;
+        }
+
+        const chaves = Object.keys(data);
+        const total = chaves.length;
+
+        // Constrói as leituras com timestamp convertido
+        const entries = chaves.map((key, idx) => {
+            const item = data[key];
+            return {
+                dataMs: timestampParaMs(item.timestamp ?? item.data, idx, total),
+                temperatura: Number(item.temperatura ?? 0),
+                umidade: Number(item.umidade ?? 0),
+                pressao: Number(item.pressao ?? 0),
+                chuva: Number(item.chuva ?? 0)   // ⚠️ incremental por leitura
+            };
+        });
+
+        // Ordena cronologicamente
+        entries.sort((a, b) => a.dataMs - b.dataMs);
+
+        const atual = entries[entries.length - 1];
+        const anterior = entries.length >= 2 ? entries[entries.length - 2] : null;
+
+        // --------------------------------------------------
+        // Cards (última leitura)
+        // --------------------------------------------------
+        document.getElementById("temperatureValue").innerHTML =
+            `${atual.temperatura.toFixed(1)}<span class="text-headline-md font-normal">°C</span>`;
+
+        document.getElementById("humidityValue").innerHTML =
+            `${atual.umidade.toFixed(0)}<span class="text-headline-md font-normal">%</span>`;
+
+        document.getElementById("pressureValue").innerHTML =
+            `${atual.pressao.toFixed(0)}<span class="text-headline-md font-normal">hPa</span>`;
+
+        document.getElementById("rainValue").innerHTML =
+            `${atual.chuva.toFixed(1)}<span class="text-headline-md font-normal">mm</span>`;
+
+        // --------------------------------------------------
+        // Última atualização + aviso de staleness
+        // --------------------------------------------------
+        const idadeMin = (Date.now() - atual.dataMs) / 60000;
+        const lastUpdateEl = document.getElementById("lastUpdate");
+        if (idadeMin > 15) {
+            lastUpdateEl.textContent = `⚠ ${formatarDataHora(atual.dataMs)} (desatualizado)`;
+        } else {
+            lastUpdateEl.textContent = formatarDataHora(atual.dataMs);
+        }
+
+        // --------------------------------------------------
+        // Indicadores de variação
+        // --------------------------------------------------
+        const tempEl = document.getElementById("temperatureChange");
+        const umidEl = document.getElementById("humidityChange");
+        const presEl = document.getElementById("pressureChange");
+        const chuvaEl = document.getElementById("rainChange");
+
+        if (anterior) {
+            const dTemp = atual.temperatura - anterior.temperatura;
+            tempEl.textContent = formatarDelta(dTemp, "°C", 1);
+            tempEl.className = "font-label-sm text-label-sm flex items-center gap-1 " +
+                (Math.abs(dTemp) < 0.05 ? 'text-on-surface-variant'
+                                        : (dTemp > 0 ? 'text-error' : 'text-blue-600'));
+
+            const dUmid = atual.umidade - anterior.umidade;
+            umidEl.textContent = formatarDelta(dUmid, "%", 1);
+            umidEl.className = "font-label-sm text-label-sm flex items-center gap-1 " +
+                (Math.abs(dUmid) < 0.05 ? 'text-on-surface-variant'
+                                        : (dUmid > 0 ? 'text-blue-600' : 'text-orange-600'));
+
+            const dPres = atual.pressao - anterior.pressao;
+            presEl.textContent = formatarDelta(dPres, " hPa", 0);
+            presEl.className = "font-label-sm text-label-sm flex items-center gap-1 text-on-surface-variant";
+        } else {
+            tempEl.textContent = umidEl.textContent = presEl.textContent = "—";
+        }
+
+        // Chuva incremental: mostra o total acumulado no período selecionado
+        const totalChuvaPeriodo = entries.reduce((s, e) => s + e.chuva, 0);
+        chuvaEl.textContent = `Σ ${totalChuvaPeriodo.toFixed(1)} mm`;
+        chuvaEl.className = "text-secondary font-label-sm text-label-sm flex items-center gap-1";
+
+        // --------------------------------------------------
+        // Tabela (últimas 5)
+        // --------------------------------------------------
+        const tableBody = document.getElementById("table-readings");
+        const ultimas5 = [...entries].reverse().slice(0, 5);
+
+        tableBody.innerHTML = ultimas5.map(e => `
+            <tr>
+                <td class="px-2 py-3 text-center font-bold text-primary">${formatarHora(e.dataMs)}</td>
+                <td class="px-2 py-3 text-center text-on-surface-variant">${e.temperatura.toFixed(1)}°C</td>
+                <td class="px-2 py-3 text-center text-on-surface-variant">${e.umidade.toFixed(0)}%</td>
+            </tr>
+        `).join('');
+
+        // --------------------------------------------------
+        // Agrupa por dia só no modo 7 dias
+        // --------------------------------------------------
+        const modoAgrupado = range >= 2016;
+
+        const dadosParaGrafico = modoAgrupado ? agruparPorDia(entries) : entries;
+
+        const labels = dadosParaGrafico.map(e =>
+            modoAgrupado ? formatarDiaMes(e.dataMs) : formatarHora(e.dataMs)
+        );
+
+        // --------------------------------------------------
+        // Gráficos
+        // --------------------------------------------------
+        chartT.data.labels = labels;
+        chartT.data.datasets[0].data = dadosParaGrafico.map(e => Math.round(e.temperatura * 100) / 100);
+        ajustarEixoY(chartT, chartT.data.datasets[0].data, { padding: 0.15, minRange: 2 });
+        chartT.update('none');
+
+        chartU.data.labels = labels;
+        chartU.data.datasets[0].data = dadosParaGrafico.map(e => Math.round(e.umidade * 10) / 10);
+        ajustarEixoY(chartU, chartU.data.datasets[0].data, { padding: 0.1, minRange: 10 });
+        chartU.update('none');
+
+        chartP.data.labels = labels;
+        chartP.data.datasets[0].data = dadosParaGrafico.map(e => Math.round(e.pressao * 100) / 100);
+        ajustarEixoY(chartP, chartP.data.datasets[0].data, { padding: 0.1, minRange: 5 });
+        chartP.update('none');
+
+        chartC.data.labels = labels;
+        chartC.data.datasets[0].data = dadosParaGrafico.map(e => Math.round(e.chuva * 10) / 10);
+        ajustarEixoY(chartC, chartC.data.datasets[0].data, { beginAtZero: true, minRange: 1 });
+        chartC.update('none');
+
+    }, (error) => {
+        // ✅ callback de erro do Firebase
+        console.error("Erro ao ler dados do Firebase:", error);
+        document.getElementById("lastUpdate").textContent = "Erro de conexão";
+    });
+}
+
+
+/* ============================================================
+   BOTÕES DE FILTRO
+   ============================================================ */
+
+const btn24h = document.getElementById('btn24h');
+const btn7d  = document.getElementById('btn7d');
+
+btn24h.onclick = () => {
+    btn24h.className = "px-4 py-2 text-xs font-bold rounded-lg bg-secondary text-white transition-all";
+    btn7d.className  = "px-4 py-2 text-xs font-bold rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all";
+    updateDashboard(288);   // 288 × 5 min = 24 h
+};
+
+btn7d.onclick = () => {
+    btn7d.className  = "px-4 py-2 text-xs font-bold rounded-lg bg-secondary text-white transition-all";
+    btn24h.className = "px-4 py-2 text-xs font-bold rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all";
+    updateDashboard(2016);  // 2016 × 5 min = 7 dias
+};
+
+// Início padrão
+updateDashboard(288);
+
+</script>
+
+</body>
+</html>
