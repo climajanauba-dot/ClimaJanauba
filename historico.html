@@ -410,21 +410,18 @@
     /*
     ============================================================
     CONVERSÃO DE TIMESTAMP
-    Aceita Unix epoch em segundos, em milissegundos, ou millis()
-    do ESP32 (fallback com datas sintéticas).
+    Aceita Unix epoch em segundos ou em milissegundos.
+    Não gera datas sintéticas para evitar lançamentos falsos.
     ============================================================
     */
-    function timestampParaMs(ts, idx, total) {
+    function timestampParaMs(ts) {
         const n = Number(ts);
-        // Se for >= 1e9, é Unix epoch (segundos ou ms)
+        // Se for >= 1e9, é Unix epoch válido (segundos ou ms)
         if (n >= 1e9) {
             return n < 1e12 ? n * 1000 : n;
         }
-        // Fallback: millis() do ESP32 → gera datas sintéticas
-        // Distribui as leituras no tempo a partir de agora, com 5 min entre cada
-        const agora = Date.now();
-        const intervalo = 5 * 60 * 1000; // 5 minutos
-        return agora - (total - 1 - idx) * intervalo;
+        // Se o timestamp for inválido, ausente ou menor que 1e9, retorna null (não inventa data)
+        return null;
     }
 
     /*
@@ -442,19 +439,21 @@
         }
 
         const chaves = Object.keys(data);
-        const total = chaves.length;
 
-        dadosMeteorologicos = chaves.map((key, idx) => {
+        // Mapeia e descarta registros que não possuam timestamp válido
+        dadosMeteorologicos = chaves.map((key) => {
             const item = data[key];
+            const dataMs = timestampParaMs(item.timestamp ?? item.data);
+            if (!dataMs) return null;
 
             return {
-                data: timestampParaMs(item.timestamp ?? item.data, idx, total),
+                data: dataMs,
                 temperatura: Number(item.temperatura ?? 0),
                 umidade: Number(item.umidade ?? 0),
                 pressao: Number(item.pressao ?? 0),
                 chuva: Number(item.chuva ?? 0)   // valor por leitura (mm)
             };
-        });
+        }).filter(item => item !== null);
 
         aplicarFiltro();
     });

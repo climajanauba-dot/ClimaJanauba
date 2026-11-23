@@ -200,7 +200,6 @@
             <div class="flex gap-4">
                 <a href="#" class="hover:text-primary transition-colors">PRIVACIDADE</a>
                 <a href="https://www.ifnmg.edu.br/" class="hover:text-primary transition-colors">IFNMG</a>
-                
             </div>
         </div>
     </footer>
@@ -233,12 +232,13 @@
         UTILITÁRIOS DE DATA
         ============================================================
         */
-        function timestampParaMs(ts, idx, total) {
+        function timestampParaMs(ts) {
             const n = Number(ts);
-            if (n >= 1e9) return n < 1e12 ? n * 1000 : n;
-            const agora = Date.now();
-            const intervalo = 5 * 60 * 1000;
-            return agora - (total - 1 - idx) * intervalo;
+            if (n >= 1e9) {
+                return n < 1e12 ? n * 1000 : n;
+            }
+            // Não gera datas sintéticas: descarta registros com timestamp inválido
+            return null;
         }
 
         function formatarHora(dataMs) {
@@ -401,7 +401,7 @@
             const v = periodoAnalise.value;
             if (v === "dia") {
                 wrapDiaEspecifico.classList.remove("hidden");
-                // Se ainda não tem data, preenche com a data da última leitura
+                // Se ainda não tem data, preenche com a data da última leitura válida
                 if (!diaEspecifico.value && todasLeituras.length) {
                     const d = new Date(todasLeituras[todasLeituras.length - 1].dataMs);
                     const pad = n => String(n).padStart(2, "0");
@@ -522,11 +522,9 @@
 
             // -------- Gráfico de temperatura (respeita filtro) --------
             if (v === "24h" || v === "dia") {
-                // Série temporal com labels de hora
                 chartT.data.labels = filtrados.map(d => formatarHora(d.dataMs));
                 chartT.data.datasets[0].data = filtrados.map(d => Number(d.temperatura.toFixed(2)));
             } else {
-                // 7d → agrupado por dia (média diária)
                 chartT.data.labels = grupos.map(g => formatarDiaMes(g.dataMs));
                 chartT.data.datasets[0].data = grupos.map(g => Number(g.temperatura.toFixed(2)));
             }
@@ -547,21 +545,28 @@
 
         onValue(leiturasRef, (snapshot) => {
             const data = snapshot.val();
-            if (!data) return;
+            if (!data) {
+                todasLeituras = [];
+                aplicarFiltro();
+                return;
+            }
 
             const chaves = Object.keys(data);
-            const total = chaves.length;
 
-            todasLeituras = chaves.map((key, idx) => {
+            // Mapeia e descarta registros que não possuam timestamp válido
+            todasLeituras = chaves.map((key) => {
                 const item = data[key];
+                const dataMs = timestampParaMs(item.timestamp ?? item.data);
+                if (!dataMs) return null;
+
                 return {
-                    dataMs: timestampParaMs(item.timestamp ?? item.data, idx, total),
+                    dataMs: dataMs,
                     temperatura: Number(item.temperatura ?? 0),
                     umidade: Number(item.umidade ?? 0),
                     pressao: Number(item.pressao ?? 0),
                     chuva: Number(item.chuva ?? 0)
                 };
-            }).sort((a, b) => a.dataMs - b.dataMs);
+            }).filter(item => item !== null).sort((a, b) => a.dataMs - b.dataMs);
 
             // Preenche o campo "dia específico" com a data mais recente
             atualizarCamposFiltro();
