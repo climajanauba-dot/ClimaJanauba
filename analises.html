@@ -424,29 +424,47 @@
         FILTRAGEM
         ============================================================
         */
+        
         function obterDadosFiltrados() {
             const v = periodoAnalise.value;
-            const agora = Date.now();
 
-            if (v === "24h") {
-                const limite = agora - 24 * 60 * 60 * 1000;
-                return todasLeituras.filter(d => d.dataMs >= limite);
-            }
+             if (!todasLeituras.length) return [];
 
-            if (v === "7d") {
-                const limite = agora - 7 * 24 * 60 * 60 * 1000;
-                return todasLeituras.filter(d => d.dataMs >= limite);
-            }
+      // Última leitura registrada no Firebase
+            const ultimaLeitura = todasLeituras[todasLeituras.length - 1].dataMs;
+
+             if (v === "24h") {
+                const limite = ultimaLeitura - 24 * 60 * 60 * 1000;
+
+            return todasLeituras.filter(d =>
+             d.dataMs >= limite && d.dataMs <= ultimaLeitura
+              );
+             }
+
+             if (v === "7d") {
+                   const limite = ultimaLeitura - 7 * 24 * 60 * 60 * 1000;
+
+                    return todasLeituras.filter(d =>
+                     d.dataMs >= limite && d.dataMs <= ultimaLeitura
+                  );
+             }
 
             if (v === "dia") {
-                if (!diaEspecifico.value) return [];
+                 if (!diaEspecifico.value) return [];
+
                 const ini = inicioDoDia(diaEspecifico.value);
                 const fim = fimDoDia(diaEspecifico.value);
-                return todasLeituras.filter(d => d.dataMs >= ini && d.dataMs <= fim);
+
+                return todasLeituras.filter(d =>
+                    d.dataMs >= ini && d.dataMs <= fim
+              );
             }
 
-            return todasLeituras;
-        }
+    return todasLeituras;
+}
+
+     
+   
 
         /*
         ============================================================
